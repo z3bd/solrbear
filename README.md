@@ -1,6 +1,8 @@
 #Apache Solr 0-day
 
 ## Hacked by: https://mp.weixin.qq.com/s/3WuWUGO61gM0dBpwqTfenQ 
+## References: https://solr.apache.org/guide/8_8/requestdispatcher-in-solrconfig.html
+
 ```
 # stand up test on docker
 docker run --name solrbear -d -p 8983:8983 -t solr
