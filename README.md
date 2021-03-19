@@ -1,10 +1,11 @@
 # Apache Solr 0-day
 
-## References: 
-https://solr.apache.org/guide/8_8/requestdispatcher-in-solrconfig.html
-https://mp.weixin.qq.com/s/3WuWUGO61gM0dBpwqTfenQ 
+#### References: 
 
-## Greetz : 本文作者  Skay @ QAX CERT
+* https://solr.apache.org/guide/8_8/requestdispatcher-in-solrconfig.html
+* https://mp.weixin.qq.com/s/3WuWUGO61gM0dBpwqTfenQ 
+
+#### Greetz : 本文作者  Skay @ QAX CERT
 
 ```
 # stand up test on docker
