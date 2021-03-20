@@ -4,9 +4,11 @@ info:
   name: Apache Solr <= 8.8.1 arbitrary file reading
   author: z3bd
   severity: info
-  reference: https://mp.weixin.qq.com/s/3WuWUGO61gM0dBpwqTfenQ
   description: An unauthenticated user can read the filesystem as the solr user
   tags: solr,lfi
+  reference: |
+      - https://mp.weixin.qq.com/s/3WuWUGO61gM0dBpwqTfenQ
+      - https://github.com/PeiQi0/PeiQi-WIKI-POC/blob/1417147780a7b8d4c44a00c79f37abd2111e11c4/_book/PeiQi_Wiki/Web%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%BC%8F%E6%B4%9E/Apache/Apache%20Solr/Apache%20Solr%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E.md
 
 requests:
   - raw:
@@ -30,7 +32,7 @@ requests:
         Accept: */*
         Content-Length: 161
         Content-Type: multipart/form-data; boundary=------------------------25d19388b98c5d9e
-        
+
         --------------------------25d19388b98c5d9e
         Content-Disposition: form-data; name="stream.url"
         
